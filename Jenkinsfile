@@ -1,12 +1,10 @@
 pipeline {
-   agent {
+  agent {
     node {
       label 'xx'
     }
 
   }
- 
-  
   stages {
     stage('Prepare') {
       steps {
@@ -57,5 +55,4 @@ pipeline {
       }
     }
   }
-  
 }
