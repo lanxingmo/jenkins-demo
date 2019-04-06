@@ -1,6 +1,6 @@
 pipeline {
   node('haimaxy-jnlp') {
-  agent none
+  
   stages {
     stage('Prepare') {
       steps {
