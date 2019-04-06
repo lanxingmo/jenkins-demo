@@ -1,10 +1,10 @@
 pipeline {
   agent none
   stages {
-    stage('Prepare') {
-        sh "1.Prepare Stage"
-        
+    stage('error') {
+      steps {
+        sh 'echo "hello"'
+      }
     }
-    
-}
+  }
 }
