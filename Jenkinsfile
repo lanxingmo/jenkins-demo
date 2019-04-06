@@ -36,9 +36,7 @@ pipeline {
     stage('Deploy') {
 		steps {
 			echo "5. Deploy Stage"
-			if (env.BRANCH_NAME == 'master') {
-				input "are you sure"
-			}
+			
 			sh "sed -i 's/<BUILD_TAG>/${build_tag}/' k8s.yaml"
 			sh "sed -i 's/<BRANCH_NAME>/${env.BRANCH_NAME}/' k8s.yaml"
 			sh "kubectl apply -f k8s.yaml --record"
