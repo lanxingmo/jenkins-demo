@@ -1,11 +1,6 @@
 pipeline {
   agent none
   stages {
-    stage('error') {
-      steps {
-        sh 'echo "hello"'
-      }
-    }
     stage('Prepare') {
 	    steps {
 			echo "1.Prepare Stage"
@@ -16,6 +11,37 @@ pipeline {
 					build_tag = "${env.BRANCH_NAME}-${build_tag}"
 				}
 			}
+		}
+    }
+    stage('Test') {
+		steps {
+		  echo "2.Test Stage"
+		}
+    }
+    stage('Build') {
+		steps {
+			echo "3.Build Docker Image Stage"
+			sh "docker build -t cnych/jenkins-demo:${build_tag} ."
+		}
+    }
+    stage('Push') {
+		steps {
+			echo "4.Push Docker Image Stage"
+			withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+				sh "docker login -u ${dockerHubUser} -p ${dockerHubPassword}"
+				sh "docker push cnych/jenkins-demo:${build_tag}"
+			}
+		}
+    }
+    stage('Deploy') {
+		steps {
+			echo "5. Deploy Stage"
+			if (env.BRANCH_NAME == 'master') {
+				input "are you sure"
+			}
+			sh "sed -i 's/<BUILD_TAG>/${build_tag}/' k8s.yaml"
+			sh "sed -i 's/<BRANCH_NAME>/${env.BRANCH_NAME}/' k8s.yaml"
+			sh "kubectl apply -f k8s.yaml --record"
 		}
     }
   }
