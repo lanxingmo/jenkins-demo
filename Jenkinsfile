@@ -1,5 +1,11 @@
 pipeline {
-  node('haimaxy-jnlp') {
+   agent {
+    node {
+      label 'xx'
+    }
+
+  }
+ 
   
   stages {
     stage('Prepare') {
@@ -51,5 +57,5 @@ pipeline {
       }
     }
   }
-  }
+  
 }
