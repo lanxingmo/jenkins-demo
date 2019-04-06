@@ -1,3 +1,4 @@
+pipeline{
 node('haimaxy-jnlp') {
     stage('Prepare') {
         echo "1.Prepare Stage"
@@ -32,4 +33,5 @@ node('haimaxy-jnlp') {
         sh "sed -i 's/<BRANCH_NAME>/${env.BRANCH_NAME}/' k8s.yaml"
         sh "kubectl apply -f k8s.yaml --record"
     }
+}
 }
